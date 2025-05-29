@@ -11,16 +11,15 @@ class VolunteerController extends Controller
      * Display a listing of the resource.
      */
     public function index() {
-       $volunteers = Volunteer::all();
-       return view('volunteers.index', compact('volunteers'));
+        return response()->json(Volunteer::all());
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Volunteer $volunteer)
     {
-        return view('volunteers.create');
+         return response()->json(Volunteer::findOrFail($volunteer));
 
     }
 
@@ -29,8 +28,8 @@ class VolunteerController extends Controller
      */
     public function store(Request $request)
     {
-        Volunteer::create($request->all());
-        return redirect()->route('volunteers.index');
+         $volunteer = Volunteer::create($request->all());
+         return response()->json($volunteer, 201); // Created
     }
 
     /**
@@ -58,8 +57,7 @@ class VolunteerController extends Controller
     {
         $volunteer = Volunteer::findOrFail($volunteer);
         $volunteer->update($request->all());
-        return redirect()->route('volunteers.index');
-
+        return response()->json($volunteer);
     }
 
     /**
@@ -68,7 +66,7 @@ class VolunteerController extends Controller
     public function destroy(Volunteer $volunteer)
     {
         Volunteer::destroy($volunteer);
-        return redirect()->route('volunteers.index');
+       return response()->json(['message' => 'Volunteer deleted']);
     }
 }
 

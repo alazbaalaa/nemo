@@ -12,7 +12,7 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        return Campaign::all();
+        return response()->json(Campaign::all());
     }
 
     /**
@@ -20,7 +20,8 @@ class CampaignController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(Campaign::findOrFail($campaign));
+
     }
 
     /**
@@ -28,8 +29,8 @@ class CampaignController extends Controller
      */
     public function store(Request $request)
     {
-        return Campaign::create($request->all());
-
+        $campaign = Campaign::create($request->all());
+         return response()->json($campaign, 201); // Created
 
     }
 
@@ -46,7 +47,8 @@ class CampaignController extends Controller
      */
     public function edit(Campaign $campaign)
     {
-        //
+        $campaign = Campaign::findOrFail($campaign);
+        return view('campaigns.edit', compact('campaign'));
     }
 
     /**
@@ -56,7 +58,7 @@ class CampaignController extends Controller
     {
         $campaign = Campaign::findOrFail($campaign);
         $campaign->update($request->all());
-        return $campaign;
+         return response()->json($campaign);
     }
 
     /**
@@ -65,6 +67,6 @@ class CampaignController extends Controller
     public function destroy(Campaign $campaign)
     {
         Campaign::destroy($campaign);
-        return response()->json(['message' => 'deleted succesfully']);
+        return response()->json(['message' => 'Campaign deleted']);
     }
 }

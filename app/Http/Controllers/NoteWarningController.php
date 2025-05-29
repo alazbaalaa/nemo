@@ -12,8 +12,7 @@ class NoteWarningController extends Controller
      */
     public function index()
     {
-        $notes = NoteWarning::all();
-        return view('note-warnings.index', compact('notes'));
+         return response()->json(NoteWarning::all());
 
     }
 
@@ -22,7 +21,7 @@ class NoteWarningController extends Controller
      */
     public function create()
     {
-        return view('note-warnings.create');
+        return response()->json(NoteWarning::findOrFail($noteWarning));
     }
 
     /**
@@ -30,8 +29,8 @@ class NoteWarningController extends Controller
      */
     public function store(Request $request)
     {
-        NoteWarning::create($request->all());
-        return redirect()->route('note-warnings.index');
+        $noteWarning = NoteWarning::create($request->all());
+         return response()->json($noteWarning, 201); // Created
 
     }
 
@@ -60,7 +59,7 @@ class NoteWarningController extends Controller
     {
         $note = NoteWarning::findOrFail($noteWarning);
         $note->update($request->all());
-         return redirect()->route('note-warnings.index');
+        return response()->json($noteWarning);
     }
 
     /**
@@ -69,6 +68,6 @@ class NoteWarningController extends Controller
     public function destroy(NoteWarning $noteWarning)
     {
         NoteWarning::destroy($noteWarning);
-        return redirect()->route('note-warnings.index');
+       return response()->json(['message' => 'NoteWarning deleted']);
     }
 }

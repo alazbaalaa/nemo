@@ -12,8 +12,7 @@ class EventController extends Controller
      */
     public function index()
     {
-         $events = Event::all();
-         return view('events.index', compact('events'));
+        return response()->json(Event::all());
 
     }
 
@@ -22,7 +21,8 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('events.create');
+       return response()->json(Event::findOrFail($event));
+
     }
 
     /**
@@ -30,8 +30,8 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        Event::create($request->all());
-        return redirect()->route('events.index');
+        $event = Event::create($request->all());
+         return response()->json($event, 201);
 
     }
 
@@ -59,7 +59,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($event);
         $event->update($request->all());
-        return redirect()->route('events.index');
+       return response()->json($event);
     }
 
     /**
@@ -68,6 +68,6 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         Event::destroy($event);
-        return redirect()->route('events.index');
+        return response()->json(['message' => 'Event deleted']);
     }
 }

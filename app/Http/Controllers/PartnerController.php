@@ -12,7 +12,7 @@ class PartnerController extends Controller
      */
     public function index()
     {
-        return Partner::all();
+        return response()->json(Partner::all());
 
     }
 
@@ -21,7 +21,7 @@ class PartnerController extends Controller
      */
     public function create()
     {
-        //
+          return response()->json(Partner::findOrFail($partner));
     }
 
     /**
@@ -29,7 +29,8 @@ class PartnerController extends Controller
      */
     public function store(Request $request)
     {
-        return Partner::create($request->all());
+         $partner = Partner::create($request->all());
+         return response()->json($partner, 201); // Created;
 
     }
 
@@ -38,7 +39,7 @@ class PartnerController extends Controller
      */
     public function show(Partner $partner)
     {
-            return Partner::findOrFail($partner);
+        return Partner::findOrFail($partner);
 
     }
 
@@ -47,7 +48,8 @@ class PartnerController extends Controller
      */
     public function edit(Partner $partner)
     {
-        //
+        $partner = Partner::findOrFail($id);
+        return view('partners.edit', compact('partner'));
     }
 
     /**
@@ -57,7 +59,8 @@ class PartnerController extends Controller
     {
         $partner = Partner::findOrFail($partner);
         $partner->update($request->all());
-        return $partner;
+        return response()->json($partner);
+
     }
 
     /**
@@ -66,6 +69,6 @@ class PartnerController extends Controller
     public function destroy(Partner $partner)
     {
         Partner::destroy($partner);
-        return response()->json(['message' => 'deleted succesfully ']);
+        return response()->json(['message' => 'Partner deleted']);
     }
 }

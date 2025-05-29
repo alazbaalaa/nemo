@@ -12,8 +12,7 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $attendances = Attendance::all();
-        return view('attendances.index', compact('attendances'));
+         return response()->json(Attendance::all());
 
     }
 
@@ -22,7 +21,7 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        return view('attendances.create');
+        return response()->json(Attendance::findOrFail($volattendanceunteer));
     }
 
     /**
@@ -30,8 +29,8 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-         Attendance::create($request->all());
-        return redirect()->route('attendances.index');
+          $attendance = Attendance::create($request->all());
+         return response()->json($attendance, 201); // Created
     }
 
     /**
@@ -59,7 +58,8 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($attendance);
         $attendance->update($request->all());
-        return redirect()->route('attendances.index');
+         return response()->json($attendance);
+
     }
 
     /**
@@ -68,9 +68,7 @@ class AttendanceController extends Controller
     public function destroy(Attendance $attendance)
     {
         Attendance::destroy($attendance);
-    return redirect()->route('attendances.index');
+       return response()->json(['message' => 'Attendance deleted']);
     }
 }
-
-
 

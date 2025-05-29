@@ -12,8 +12,7 @@ class EvaluationController extends Controller
      */
     public function index()
     {
-        $evaluations = Evaluation::all();
-        return view('evaluations.index', compact('evaluations'));
+       return response()->json(Evaluation::all());
     }
 
     /**
@@ -21,7 +20,7 @@ class EvaluationController extends Controller
      */
     public function create()
     {
-         return view('evaluations.create');
+         return response()->json(Evaluation::findOrFail($evaluation));
     }
 
     /**
@@ -29,8 +28,8 @@ class EvaluationController extends Controller
      */
     public function store(Request $request)
     {
-        Evaluation::create($request->all());
-        return redirect()->route('evaluations.index');
+        $evaluation = Evaluation::create($request->all());
+         return response()->json($evaluation, 201); // Created
     }
 
     /**
@@ -57,7 +56,7 @@ class EvaluationController extends Controller
     {
         $evaluation = Evaluation::findOrFail($evaluation);
         $evaluation->update($request->all());
-        return redirect()->route('evaluations.index');
+         return response()->json($evaluation);
     }
 
     /**
@@ -66,6 +65,6 @@ class EvaluationController extends Controller
     public function destroy(Evaluation $evaluation)
     {
         Evaluation::destroy($evaluation);
-        return redirect()->route('evaluations.index');
+       return response()->json(['message' => 'Evaluation deleted']);
     }
 }

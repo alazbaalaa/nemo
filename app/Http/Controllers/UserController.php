@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
     public function index() {
-        $users = User::all();
-        return view('users.index', compact('users'));
+       return response()->json(User::all());
     }
 
     public function show(User $user) {
@@ -16,14 +16,14 @@ class UserController extends Controller
     }
 
     public function create() {
-    return view('users.create');
+    return response()->json(User::findOrFail($user));
 }
 
     public function store(Request $request) {
-        $data = $request->all();
+        $user = User::create($request->all());
         $data['password'] = Hash::make($data['password']);
         User::create($data);
-        return redirect()->route('users.index');
+        return response()->json($user, 201); // Created
     }
 
 
@@ -41,11 +41,12 @@ class UserController extends Controller
         }
 
         $user->update($data);
-       return redirect()->route('users.index');
+        return response()->json($user);
     }
 
     public function destroy(User $user) {
         User::destroy($user);
-        return redirect()->route('users.index');
+        return response()->json(['message' => 'User deleted']);
+
     }
 }
